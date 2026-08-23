@@ -120,9 +120,9 @@
 </div>
 
 <script>
-  // Insert your project credentials here
-  const SUPABASE_URL = "YOUR_SUPABASE_URL_HERE"; 
-  const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY_HERE"; 
+  // Dynamic Credentials Integration
+  const SUPABASE_URL = "https://sahfqmjabdlieiwbmvoi.supabase.co"; 
+  const SUPABASE_KEY = "sb_publishable_Nd-Yocjj36L8N69h1B98TQ_tFLfgzz8"; 
   const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
   // Load School Info on Startup
@@ -244,8 +244,7 @@
     await client.auth.signOut();
     location.reload();
   }
-</script>NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_Nd-Yocjj36L8N69h1B98TQ_tFLfgzz8
-  https://sahfqmjabdlieiwbmvoi.supabase.co
+</script>
 
 </body>
 </html>
