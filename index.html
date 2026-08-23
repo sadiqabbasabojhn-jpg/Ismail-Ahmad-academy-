@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ha">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,64 +32,64 @@
   <p>Email: ismailahmadacademic@yahoo.com | Web: https://ismailahmadacademic.ng</p>
 </div>
 
-<!-- Shafin Bayani Na Filari (Mission, Vision, About Us) -->
+<!-- Public School Information Section -->
 <div style="max-width: 850px; margin: 20px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
   <div class="info-section">
-    <h3 style="margin-top:0; color:#1e3a8a;">Game da Makarantar (About Us)</h3>
-    <p id="txtAbout">Ismail Ahmad Memorial Academy makaranta ce da aka kafa ta domin samar da ingantaccen ilimi na zamani da addini a garin Jahun da kewaye.</p>
+    <h3 style="margin-top:0; color:#1e3a8a;">About Us</h3>
+    <p id="txtAbout">Ismail Ahmad Memorial Academy is committed to delivering quality modern education and sound moral discipline in Jahun and surrounding areas.</p>
   </div>
   <div style="display: flex; gap: 15px;">
     <div class="info-section" style="flex: 1;">
-      <h4 style="margin-top:0; color:#1e3a8a;">Kudurori (Mission)</h4>
-      <p id="txtMission">Makaranta Madaidaiciya domin gina al'umma mai ilimi da tarbiyya.</p>
+      <h4 style="margin-top:0; color:#1e3a8a;">Mission Statement</h4>
+      <p id="txtMission">To empower students through quality education, discipline, and core ethical values.</p>
     </div>
     <div class="info-section" style="flex: 1;">
-      <h4 style="margin-top:0; color:#1e3a8a;">Manufa (Vision)</h4>
-      <p id="txtVision">Zama babbar cibiyar ilimi mafi fice a jihar Jigawa.</p>
+      <h4 style="margin-top:0; color:#1e3a8a;">Vision Statement</h4>
+      <p id="txtVision">To become a premier center of academic excellence and character development in Jigawa State.</p>
     </div>
   </div>
 </div>
 
-<!-- Shafin Shiga Portal (Login Section) -->
+<!-- Portal Login Section -->
 <div id="loginSection" class="card">
-  <h3 style="text-align: center; color: #1e3a8a; margin-top:0;">Shiga Shafin Makaranta (Portal)</h3>
-  <input type="email" id="loginEmail" placeholder="Saka Email Ɗinka" value="sadiqabbasabojhn@gmail.com">
-  <input type="password" id="loginPassword" placeholder="Saka Password Ɗinka" value="Sadiq001">
-  <button onclick="handleLogin()" id="loginBtn">Shiga Shafin (Login)</button>
+  <h3 style="text-align: center; color: #1e3a8a; margin-top:0;">School Portal Login</h3>
+  <input type="email" id="loginEmail" placeholder="Enter Your Email" value="sadiqabbasabojhn@gmail.com">
+  <input type="password" id="loginPassword" placeholder="Enter Your Password" value="Sadiq001">
+  <button onclick="handleLogin()" id="loginBtn">Login to Portal</button>
   
   <div class="footer">
     <p>Powered by <strong>ALKALI ICT & NETWORK SOLUTION CENTER</strong></p>
   </div>
 </div>
 
-<!-- Cikakken Shafin Dashboard -->
+<!-- Full Portal Dashboard Section -->
 <div id="dashboardSection" class="dashboard hidden">
-  <h2 id="welcomeMsg" style="margin-bottom: 5px;">Barka da Zuwa</h2>
+  <h2 id="welcomeMsg" style="margin-bottom: 5px;">Welcome</h2>
   <span id="roleBadge" class="badge">PROPRIETOR / SUPER ADMIN</span>
   <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
 
-  <!-- 1. Super Admin / Proprietor Control Panel -->
+  <!-- 1. Proprietor / Super Admin Panel -->
   <div id="adminPanel">
-    <h3 style="color: #1e3a8a;">1. Shafin Gudanarwa Na Proprietor (Admin Panel)</h3>
+    <h3 style="color: #1e3a8a;">1. Proprietor Management Panel</h3>
     <div class="panel-box">
-      <h4>Sauya Bayanan Makarantar (School Info & Branding)</h4>
-      <input type="text" id="inputLogoUrl" placeholder="Hanyar Hoto/Logo Link (URL)">
-      <textarea id="inputAbout" placeholder="Rubuta bayanin 'About Us'..." rows="3"></textarea>
-      <textarea id="inputMission" placeholder="Rubuta 'Mission Statement'..." rows="2"></textarea>
-      <textarea id="inputVision" placeholder="Rubuta 'Vision Statement'..." rows="2"></textarea>
-      <button onclick="saveSchoolInfo()" style="background: #059669;">Adana Bayanai (Save Info)</button>
+      <h4>Update School Branding & Public Information</h4>
+      <input type="text" id="inputLogoUrl" placeholder="Logo Image URL">
+      <textarea id="inputAbout" placeholder="Write 'About Us' details..." rows="3"></textarea>
+      <textarea id="inputMission" placeholder="Write 'Mission Statement'..." rows="2"></textarea>
+      <textarea id="inputVision" placeholder="Write 'Vision Statement'..." rows="2"></textarea>
+      <button onclick="saveSchoolInfo()" style="background: #059669;">Save Information</button>
     </div>
   </div>
 
-  <!-- 2. Class Master / Malamai Panel -->
+  <!-- 2. Class Master Panel -->
   <div id="classMasterPanel" style="margin-top:25px;">
-    <h3 style="color: #1e3a8a;">2. Shafin Rijistar Ɗalibai (Class Master Panel)</h3>
+    <h3 style="color: #1e3a8a;">2. Class Master & Student Registration Panel</h3>
     <div class="panel-box">
-      <h4>Rijistar Sabon Ɗalibi</h4>
-      <input type="text" id="studentName" placeholder="Cikakken Sunan Ɗalibi">
-      <input type="text" id="admissionNo" placeholder="Lambar Admisson (Misl: IAM/2026/001)">
+      <h4>Register New Student</h4>
+      <input type="text" id="studentName" placeholder="Full Name of Student">
+      <input type="text" id="admissionNo" placeholder="Admission Number (e.g., IAM/2026/001)">
       
-      <label style="display:block; margin-top:10px; font-weight:bold; font-size:13px;">Zaɓi Ajin Ɗalibi:</label>
+      <label style="display:block; margin-top:10px; font-weight:bold; font-size:13px;">Select Class:</label>
       <select id="studentClass">
         <option value="PRI 1">Primary 1</option>
         <option value="PRI 2">Primary 2</option>
@@ -102,24 +102,24 @@
         <option value="Junior 3">Junior Secondary 3 (JSS 3)</option>
       </select>
 
-      <button onclick="registerStudent()" id="regBtn" style="background: #2563eb;">Yi Rijistar Ɗalibi (Register Student)</button>
+      <button onclick="registerStudent()" id="regBtn" style="background: #2563eb;">Register Student</button>
     </div>
   </div>
 
   <!-- 3. Accountant Panel -->
   <div id="accountantPanel" style="margin-top:25px;">
-    <h3 style="color: #1e3a8a;">3. Shafin Account / Kudade (Accountant Panel)</h3>
+    <h3 style="color: #1e3a8a;">3. Finance & Accounts Panel</h3>
     <div class="panel-box">
-      <h4>Biya ko Binciken Kudin Makaranta (School Fees)</h4>
-      <p style="font-size: 14px; color: #4b5563;">A nan za ka iya bincika kudin makarantar dalibi ko shigar da biyan kudin makaranta.</p>
-      <input type="text" placeholder="Saka Lambar Admission din Dalibi">
-      <input type="number" placeholder="Adadin Kudin da ya biya (₦)">
-      <button style="background: #d97706;">Shigar da Biya (Record Payment)</button>
+      <h4>Record & Track School Fees</h4>
+      <p style="font-size: 14px; color: #4b5563;">Search student records or enter new fee collection records.</p>
+      <input type="text" placeholder="Enter Student Admission Number">
+      <input type="number" placeholder="Fee Amount Paid (₦)">
+      <button style="background: #d97706;">Record Payment</button>
     </div>
   </div>
 
   <br><br>
-  <button onclick="handleLogout()" style="background: #dc2626;">Fita Daga Shafin (Logout)</button>
+  <button onclick="handleLogout()" style="background: #dc2626;">Logout</button>
   
   <div class="footer">
     <p>Powered by <strong>ALKALI ICT & NETWORK SOLUTION CENTER</strong></p>
@@ -127,17 +127,17 @@
 </div>
 
 <script>
-  // Dynamic Credentials Integration
+  // Supabase Configuration
   const SUPABASE_URL = "https://sahfqmjabdlieiwbmvoi.supabase.co"; 
   const SUPABASE_KEY = "sb_publishable_Nd-Yocjj36L8N69h1B98TQ_tFLfgzz8"; 
   let client = null;
 
   try {
-    if(window.supabase) {
+    if (window.supabase) {
       client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     }
   } catch(e) {
-    console.log("Supabase Client Init Warning:", e);
+    console.log("Supabase Client Initialization Note:", e);
   }
 
   async function handleLogin() {
@@ -145,39 +145,39 @@
     const password = document.getElementById('loginPassword').value.trim();
     const btn = document.getElementById('loginBtn');
 
-    if(!email || !password) {
-      alert("Don Allah saka Email da Password!");
+    if (!email || !password) {
+      alert("Please enter both Email and Password!");
       return;
     }
 
-    btn.innerText = "Ana Tabbatarwa (Authenticating)...";
+    btn.innerText = "Authenticating...";
     btn.disabled = true;
 
-    // Direct Login override idan amfani da takamaiman email dinka
-    if(email === "sadiqabbasabojhn@gmail.com" && password === "Sadiq001") {
-        openDashboard("Sadiq Abbas (Proprietor)", "SUPER ADMIN");
-        return;
+    // Direct Login override for your specific email and password
+    if (email === "sadiqabbasabojhn@gmail.com" && password === "Sadiq001") {
+      openDashboard("Sadiq Abbas (Proprietor)", "SUPER ADMIN");
+      return;
     }
 
-    // Idan an saita Supabase DB
-    if(client) {
+    // Attempt Supabase DB Authentication if configured
+    if (client) {
       try {
         const { data, error } = await client.auth.signInWithPassword({ email, password });
         if (error) {
           alert("Login Error: " + error.message);
-          btn.innerText = "Shiga Shafin (Login)";
+          btn.innerText = "Login to Portal";
           btn.disabled = false;
         } else {
           openDashboard(email, "USER");
         }
       } catch(err) {
-        alert("Akwai matsalar haɗawa da server: " + err.message);
-        btn.innerText = "Shiga Shafin (Login)";
+        alert("Server Connection Error: " + err.message);
+        btn.innerText = "Login to Portal";
         btn.disabled = false;
       }
     } else {
-      alert("Tabbatar Email da Password dinka sun dace!");
-      btn.innerText = "Shiga Shafin (Login)";
+      alert("Invalid credentials. Please try again.");
+      btn.innerText = "Login to Portal";
       btn.disabled = false;
     }
   }
@@ -185,12 +185,12 @@
   function openDashboard(userName, role) {
     document.getElementById('loginSection').classList.add('hidden');
     document.getElementById('dashboardSection').classList.remove('hidden');
-    document.getElementById('welcomeMsg').innerText = "Barka da Zuwa, " + userName;
-    document.getElementById('roleBadge').innerText = "RANGI: " + role;
+    document.getElementById('welcomeMsg').innerText = "Welcome, " + userName;
+    document.getElementById('roleBadge').innerText = "ROLE: " + role;
   }
 
   function saveSchoolInfo() {
-    alert("An yi nasarar sabunta bayanan makaranta na 'About Us', 'Mission' da 'Vision'!");
+    alert("School 'About Us', 'Mission', and 'Vision' information updated successfully!");
   }
 
   function registerStudent() {
@@ -198,12 +198,12 @@
     const admission_no = document.getElementById('admissionNo').value;
     const class_name = document.getElementById('studentClass').value;
 
-    if(!full_name || !admission_no) {
-      alert("Don Allah cika sunan dalibi da lambar admission!");
+    if (!full_name || !admission_no) {
+      alert("Please fill in both student name and admission number!");
       return;
     }
 
-    alert("An yi nasarar yi wa dalibi " + full_name + " (" + admission_no + ") rijista a ajin " + class_name + "!");
+    alert("Successfully registered " + full_name + " (" + admission_no + ") under " + class_name + "!");
     document.getElementById('studentName').value = '';
     document.getElementById('admissionNo').value = '';
   }
