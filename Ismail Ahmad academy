@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ismail Ahmad Memorial Academy — School Management System</title>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --secondary: #059669;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --bg: #f3f4f6;
+      --card: #ffffff;
+      --text: #1f2937;
+    }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 0; }
+    .header { background: var(--primary); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+    .header h1 { margin: 0; font-size: 18px; }
+    .header p { margin: 2px 0 0; font-size: 12px; opacity: 0.8; }
+    
+    .container { max-width: 1100px; margin: 20px auto; padding: 0 15px; }
+    .card { background: var(--card); padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; }
+    
+    /* Navigation Tabs */
+    .nav-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; background: #e5e7eb; padding: 8px; border-radius: 8px; }
+    .nav-tab { padding: 8px 14px; background: transparent; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; color: #4b5563; font-size: 13px; }
+    .nav-tab.active { background: var(--primary); color: white; }
+    
+    /* UI Components */
+    input, select, textarea, button { width: 100%; padding: 10px; margin-top: 6px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #d1d5db; box-sizing: border-box; font-family: inherit; }
+    button { background: var(--primary); color: white; border: none; font-weight: bold; cursor: pointer; }
+    button:hover { opacity: 0.9; }
+    .btn-danger { background: var(--danger); }
+    .btn-success { background: var(--secondary); }
+    
+    /* Data Tables */
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 13px; }
+    th, td { border: 1px solid #e5e7eb; padding: 10px; text-align: left; }
+    th { background: #f9fafb; color: var(--primary); }
+    
+    .hidden { display: none !important; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+    .stat-card { background: #f8fafc; border-left: 4px solid var(--primary); padding: 15px; border-radius: 6px; }
+    .stat-card h4 { margin: 0; font-size: 12px; color: #6b7280; }
+    .stat-card h2 { margin: 5px 0 0; color: var(--primary); }
+    
+    .badge { padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; display: inline-block; }
+    .bg-green { background: #d1fae5; color: #065f46; }
+    .bg-red { background: #fee2e2; color: #991b1b; }
+    .bg-yellow { background: #fef3c7; color: #92400e; }
+    
+    .footer { text-align: center; margin-top: 40px; font-size: 12px; color: #6b7280; padding: 15px; border-top: 1px solid #e5e7eb; }
+    
+    /* Printable Report Card Styles */
+    @media print {
+      body * { visibility: hidden; }
+      #printableArea, #printableArea * { visibility: visible; }
+      #printableArea { position: absolute; left: 0; top: 0; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>Ismail Ahmad Memorial Academy</h1>
+    <p>School Management System</p>
+  </div>
+  <div id="userHeaderInfo" class="hidden">
+    <span id="loggedInRole" style="font-size: 12px; font-weight: bold; background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 12px;">Role: Admin</span>
+    <button onclick="logout()" style="width: auto; margin: 0 0 0 10px; padding: 5px 12px; font-size: 12px;" class="btn-danger">Logout</button>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- LOGIN SECTION -->
+  <div id="loginSection" class="card" style="max-width: 400px; margin: 50px auto;">
+    <h3 style="text-align: center; color: var(--primary); margin-top: 0;">Portal Login</h3>
+    <label>Username / Email</label>
+    <input type="text" id="loginUser" value="sadiqabbasabojhn@gmail.com">
+    <label>Password</label>
+    <input type="password" id="loginPass" value="Sadiq001">
+    <button onclick="attemptLogin()">Login</button>
+    <p style="font-size: 11px; color: #6b7280; text-align: center; margin-top: 15px;">
+      Configured Credentials:<br>
+      • admin / iama2026<br>
+      • classmaster / marks2026<br>
+      • teacher / teach2026
+    </p>
+  </div>
+
+  <!-- MAIN SYSTEM PORTAL -->
+  <div id="portalSection" class="hidden">
+    
+    <!-- NAVIGATION TABS -->
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="switchTab('dashboard')">1. Dashboard</button>
+      <button class="nav-tab" onclick="switchTab('students')">2. Students</button>
+      <button class="nav-tab" onclick="switchTab('attendance')">3. Attendance</button>
+      <button class="nav-tab" onclick="switchTab('fees')">4. Fees</button>
+      <button class="nav-tab" onclick="switchTab('results')">5. Results</button>
+      <button class="nav-tab" id="tabEnterMarks" onclick="switchTab('entermarks')">6. Enter Marks</button>
+      <button class="nav-tab" onclick="switchTab('reports')">7. Reports</button>
+      <button class="nav-tab" onclick="switchTab('timetable')">8. Timetable</button>
+      <button class="nav-tab" onclick="switchTab('staff')">9. Staff</button>
+      <button class="nav-tab" onclick="switchTab('notices')">10. Notices</button>
+      <button class="nav-tab" id="tabAdmission" onclick="switchTab('admission')">11. Admission</button>
+      <button class="nav-tab" onclick="switchTab('about')">12. About</button>
+    </div>
+
+    <!-- 1. DASHBOARD -->
+    <div id="view-dashboard" class="tab-content card">
+      <h3>System Overview</h3>
+      <div class="grid-4">
+        <div class="stat-card"><h4>TOTAL STUDENTS</h4><h2 id="dashStudents">3</h2></div>
+        <div class="stat-card"><h4>TOTAL STAFF</h4><h2>8</h2></div>
+        <div class="stat-card"><h4>FEES COLLECTED</h4><h2 id="dashFeesPaid">₦75,000</h2></div>
+        <div class="stat-card"><h4>FEES OUTSTANDING</h4><h2 id="dashFeesDue">₦15,000</h2></div>
+      </div>
+      <br>
+      <div class="grid-4" style="grid-template-columns: 2fr 1fr;">
+        <div>
+          <h4>Latest Announcements</h4>
+          <div id="dashNoticeList"></div>
+        </div>
+        <div>
+          <h4>Academic Calendar</h4>
+          <p style="font-size: 13px; color: #4b5563;">Current Term: <strong>2nd Term 2026</strong><br>Mid-Term Break: March 15, 2026</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. STUDENTS LIST -->
+    <div id="view-students" class="tab-content card hidden">
+      <h3>Student Directory</h3>
+      <input type="text" id="searchStudent" placeholder="Search by Name or ID..." onkeyup="renderStudents()">
+      <table>
+        <thead>
+          <tr><th>ID</th><th>Full Name</th><th>Class</th><th>Fees Status</th><th>Attendance</th></tr>
+        </thead>
+        <tbody id="studentTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- 3. ATTENDANCE -->
+    <div id="view-attendance" class="tab-content card hidden">
+      <h3>Daily Attendance Record</h3>
+      <p style="font-size: 12px; color: #6b7280;">Click on status badge to toggle: Present / Late / Absent</p>
+      <table>
+        <thead>
+          <tr><th>Student Name</th><th>Class</th><th>Status Today</th></tr>
+        </thead>
+        <tbody id="attendanceTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- 4. FEES -->
+    <div id="view-fees" class="tab-content card hidden">
+      <h3>Fee Tracking & Payment</h3>
+      <table>
+        <thead>
+          <tr><th>Student Name</th><th>Class</th><th>Total Fee</th><th>Paid</th><th>Outstanding</th><th>Action</th></tr>
+        </thead>
+        <tbody id="feesTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- 5. RESULTS -->
+    <div id="view-results" class="tab-content card hidden">
+      <h3>Exam Scores & Performance Rankings</h3>
+      <table>
+        <thead>
+          <tr><th>Position</th><th>Student Name</th><th>Total Score</th><th>Average</th><th>Grade</th></tr>
+        </thead>
+        <tbody id="resultsTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- 6. ENTER MARKS (Class Master Restricted) -->
+    <div id="view-entermarks" class="tab-content card hidden">
+      <h3>Enter Student Marks</h3>
+      <div id="marksRestrictedMsg" class="hidden" style="color: var(--danger); font-weight: bold; margin-bottom: 10px;">
+        ⚠️ Access Restricted: Only Class Master can enter scores.
+      </div>
+      <div id="marksFormContainer">
+        <label>Select Student</label>
+        <select id="marksStudentSelect" onchange="loadStudentMarksIntoForm()"></select>
+        
+        <div class="grid-4" style="margin-top: 10px;">
+          <div><label>English</label><input type="number" id="m_eng" max="100" min="0" value="0"></div>
+          <div><label>Maths</label><input type="number" id="m_math" max="100" min="0" value="0"></div>
+          <div><label>Science</label><input type="number" id="m_sci" max="100" min="0" value="0"></div>
+          <div><label>Social</label><input type="number" id="m_soc" max="100" min="0" value="0"></div>
+          <div><label>IRS/CRS</label><input type="number" id="m_rel" max="100" min="0" value="0"></div>
+          <div><label>Hausa</label><input type="number" id="m_hau" max="100" min="0" value="0"></div>
+          <div><label>Computer</label><input type="number" id="m_comp" max="100" min="0" value="0"></div>
+        </div>
+        <button onclick="saveStudentMarks()" class="btn-success" style="margin-top: 15px;">Save & Recalculate Results</button>
+      </div>
+    </div>
+
+    <!-- 7. REPORTS -->
+    <div id="view-reports" class="tab-content card hidden">
+      <h3>Student Report Cards</h3>
+      <label>Select Student</label>
+      <select id="reportStudentSelect" onchange="renderReportCard()"></select>
+      
+      <div id="printableArea" class="card" style="border: 2px solid var(--primary); margin-top: 15px;">
+        <div style="text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px;">
+          <h2 style="margin: 0; color: var(--primary);">ISMAIL AHMAD MEMORIAL ACADEMY</h2>
+          <p style="margin: 3px 0; font-size: 12px;">Agency for Mass Education Women Centre, Tsohon Layi, Jahun LGA, Jigawa State</p>
+          <h4 style="margin: 10px 0 0; text-decoration: underline;">STUDENT TERMINAL REPORT CARD</h4>
+        </div>
+        
+        <div id="reportCardDetails" style="margin-top: 15px;"></div>
+        
+        <button onclick="window.print()" class="btn-success" style="margin-top: 20px;">Print Report Card</button>
+      </div>
+    </div>
+
+    <!-- 8. TIMETABLE -->
+    <div id="view-timetable" class="tab-content card hidden">
+      <h3>Weekly Class Timetable (Mon–Fri)</h3>
+      <table>
+        <thead>
+          <tr><th>Day</th><th>8:00 - 9:00 AM</th><th>9:00 - 10:00 AM</th><th>10:30 - 11:30 AM</th><th>11:30 - 12:30 PM</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Monday</td><td>Mathematics</td><td>English</td><td>Science</td><td>Computer</td></tr>
+          <tr><td>Tuesday</td><td>English</td><td>Hausa</td><td>Social Studies</td><td>IRS/CRS</td></tr>
+          <tr><td>Wednesday</td><td>Science</td><td>Mathematics</td><td>Computer</td><td>English</td></tr>
+          <tr><td>Thursday</td><td>Social Studies</td><td>IRS/CRS</td><td>Mathematics</td><td>Hausa</td></tr>
+          <tr><td>Friday</td><td>Hausa</td><td>Computer</td><td>Islamic Studies</td><td>Revision</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 9. STAFF DIRECTORY -->
+    <div id="view-staff" class="tab-content card hidden">
+      <h3>Staff Directory</h3>
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Role</th><th>Subject / Assignment</th><th>Phone</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Sadiq Abbas</td><td>Proprietor / Super Admin</td><td>Management</td><td>+234 800 000 0000</td></tr>
+          <tr><td>Malam Aminu Jahun</td><td>Class Master</td><td>Mathematics & Computer</td><td>+234 801 111 2222</td></tr>
+          <tr><td>Aisha Bello</td><td>Teacher</td><td>English Language</td><td>+234 802 333 4444</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 10. NOTICES -->
+    <div id="view-notices" class="tab-content card hidden">
+      <h3>Publish Announcements</h3>
+      <div id="addNoticeForm">
+        <input type="text" id="noticeTitle" placeholder="Announcement Title">
+        <textarea id="noticeBody" placeholder="Write notice content..."></textarea>
+        <button onclick="publishNotice()">Publish Notice</button>
+      </div>
+      <hr style="margin: 20px 0;">
+      <div id="noticesContainer"></div>
+    </div>
+
+    <!-- 11. ADMISSION -->
+    <div id="view-admission" class="tab-content card hidden">
+      <h3>Register New Student (Nursery → JS 3)</h3>
+      <label>Full Name</label>
+      <input type="text" id="admName">
+      <label>Assign Admission Number</label>
+      <input type="text" id="admId" placeholder="e.g. IAM/2026/004">
+      <label>Class</label>
+      <select id="admClass">
+        <option>Nursery 1</option><option>Nursery 2</option>
+        <option>Primary 1</option><option>Primary 2</option><option>Primary 3</option>
+        <option>Primary 4</option><option>Primary 5</option><option>Primary 6</option>
+        <option>JS 1</option><option>JS 2</option><option>JS 3</option>
+      </select>
+      <button onclick="registerNewStudent()" class="btn-success">Register Student</button>
+    </div>
+
+    <!-- 12. ABOUT -->
+    <div id="view-about" class="tab-content card hidden">
+      <h3>About Ismail Ahmad Memorial Academy</h3>
+      <p><strong>Motto:</strong> Knowledge, Moral & Excellence</p>
+      <p><strong>Address:</strong> Agency for Mass Education Women Centre, Tsohon Layi, Jahun LGA, Jigawa State</p>
+      <p><strong>Email:</strong> ismailahmadacademic@yahoo.com</p>
+      <p><strong>Website:</strong> https://ismailahmadacademic.ng</p>
+      <hr style="margin: 20px 0;">
+      <p style="font-size: 13px; color: #4b5563;">
+        Developed by: <strong>NA ALKALI ICT AND NETWORK SOLUTION CENTER</strong><br>
+        All Rights Reserved © 2026
+      </p>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    Ismail Ahmad Memorial Academy — School Management System<br>
+    Developed by: <strong>NA ALKALI ICT AND NETWORK SOLUTION CENTER</strong><br>
+    All Rights Reserved © 2026
+  </div>
+
+</div>
+
+<script>
+  // SYSTEM STATE DATABASE
+  let currentUserRole = null; // 'admin', 'classmaster', 'teacher'
+  
+  let students = [
+    { id: "IAM/2026/001", name: "Ibrahim Sadiq", class: "JS 1", feesPaid: 30000, feesTotal: 30000, attendance: "Present", marks: { eng: 85, math: 90, sci: 78, soc: 80, rel: 88, hau: 82, comp: 95 } },
+    { id: "IAM/2026/002", name: "Fatima Usman", class: "JS 1", feesPaid: 30000, feesTotal: 30000, attendance: "Present", marks: { eng: 85, math: 90, sci: 78, soc: 80, rel: 88, hau: 82, comp: 95 } },
+    { id: "IAM/2026/003", name: "Zainab Abubakar", class: "JS 1", feesPaid: 15000, feesTotal: 30000, attendance: "Absent", marks: { eng: 60, math: 55, sci: 62, soc: 58, rel: 70, hau: 65, comp: 60 } }
+  ];
+
+  let notices = [
+    { title: "Mid-Term Break Announcement", body: "School closes for mid-term break on March 15, 2026.", date: "2026-02-20" },
+    { title: "2nd Term Fees Deadline", body: "All parents are advised to settle outstanding fees before exams.", date: "2026-02-18" }
+  ];
+
+  // AUTHENTICATION
+  function attemptLogin() {
+    const u = document.getElementById('loginUser').value.trim();
+    const p = document.getElementById('loginPass').value.trim();
+
+    if ((u === "admin" && p === "iama2026") || (u === "sadiqabbasabojhn@gmail.com" && p === "Sadiq001")) {
+      currentUserRole = "admin";
+    } else if (u === "classmaster" && p === "marks2026") {
+      currentUserRole = "classmaster";
+    } else if (u === "teacher" && p === "teach2026") {
+      currentUserRole = "teacher";
+    } else {
+      alert("Invalid Username or Password!");
+      return;
+    }
+
+    document.getElementById('loginSection').classList.add('hidden');
+    document.getElementById('portalSection').classList.remove('hidden');
+    document.getElementById('userHeaderInfo').classList.remove('hidden');
+    document.getElementById('loggedInRole').innerText = "Role: " + currentUserRole.toUpperCase();
+
+    applyRoleRestrictions();
+    refreshAllData();
+  }
+
+  function logout() {
+    location.reload();
+  }
+
+  function applyRoleRestrictions() {
+    // Restrict Enter Marks & Admission based on role
+    const marksForm = document.getElementById('marksFormContainer');
+    const marksMsg = document.getElementById('marksRestrictedMsg');
+    
+    if (currentUserRole === 'teacher') {
+      marksForm.classList.add('hidden');
+      marksMsg.classList.remove('hidden');
+      document.getElementById('addNoticeForm').classList.add('hidden');
+      document.getElementById('tabAdmission').classList.add('hidden');
+    } else if (currentUserRole === 'classmaster') {
+      marksForm.classList.remove('hidden');
+      marksMsg.classList.add('hidden');
+      document.getElementById('tabAdmission').classList.add('hidden');
+    } else {
+      // Admin Access
+      marksForm.classList.remove('hidden');
+      marksMsg.classList.add('hidden');
+      document.getElementById('tabAdmission').classList.remove('hidden');
+    }
+  }
+
+  // TAB SWITCHING
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+    
+    document.getElementById('view-' + tabId).classList.remove('hidden');
+    event.target.classList.add('active');
+  }
+
+  // CALCULATION LOGIC (GRADES & DENSE RANKING)
+  function calculateStudentData(student) {
+    const m = student.marks;
+    const total = m.eng + m.math + m.sci + m.soc + m.rel + m.hau + m.comp;
+    const avg = parseFloat((total / 7).toFixed(1));
+    
+    let grade = 'F';
+    if (avg >= 70) grade = 'A';
+    else if (avg >= 60) grade = 'B';
+    else if (avg >= 50) grade = 'C';
+    else if (avg >= 40) grade = 'D';
+    else if (avg >= 30) grade = 'E';
+
+    return { total, avg, grade };
+  }
+
+  function getRankings() {
+    // Sort students by total score descending
+    let sorted = [...students].map(s => {
+      const calc = calculateStudentData(s);
+      return { ...s, total: calc.total, avg: calc.avg, grade: calc.grade };
+    }).sort((a, b) => b.total - a.total);
+
+    // Apply Dense Rank (1, 1, 1, 2...)
+    let currentRank = 1;
+    for (let i = 0; i < sorted.length; i++) {
+      if (i > 0 && sorted[i].total < sorted[i - 1].total) {
+        currentRank++;
+      }
+      sorted[i].position = currentRank;
+    }
+    return sorted;
+  }
+
+  // REFRESH DATA VIEWS
+  function refreshAllData() {
+    renderDashboard();
+    renderStudents();
+    renderAttendance();
+    renderFees();
+    renderResults();
+    populateSelects();
+    renderNotices();
+  }
+
+  function renderDashboard() {
+    document.getElementById('dashStudents').innerText = students.length;
+    let paid = students.reduce((acc, s) => acc + s.feesPaid, 0);
+    let total = students.reduce((acc, s) => acc + s.feesTotal, 0);
+    document.getElementById('dashFeesPaid').innerText = '₦' + paid.toLocaleString();
+    document.getElementById('dashFeesDue').innerText = '₦' + (total - paid).toLocaleString();
+  }
+
+  function renderStudents() {
+    const q = document.getElementById('searchStudent').value.toLowerCase();
+    const tbody = document.getElementById('studentTableBody');
+    tbody.innerHTML = '';
+
+    students.filter(s => s.name.toLowerCase().includes(q) || s.id.toLowerCase().includes(q)).forEach(s => {
+      const feeStatus = s.feesPaid >= s.feesTotal ? '<span class="badge bg-green">Paid</span>' : '<span class="badge bg-red">Outstanding</span>';
+      tbody.innerHTML += `<tr>
+        <td>${s.id}</td>
+        <td>${s.name}</td>
+        <td>${s.class}</td>
+        <td>${feeStatus}</td>
+        <td>${s.attendance}</td>
+      </tr>`;
+    });
+  }
+
+  function renderAttendance() {
+    const tbody = document.getElementById('attendanceTableBody');
+    tbody.innerHTML = '';
+    students.forEach((s, index) => {
+      let badgeClass = s.attendance === 'Present' ? 'bg-green' : (s.attendance === 'Late' ? 'bg-yellow' : 'bg-red');
+      tbody.innerHTML += `<tr>
+        <td>${s.name}</td>
+        <td>${s.class}</td>
+        <td><span class="badge ${badgeClass}" style="cursor:pointer;" onclick="toggleAttendance(${index})">${s.attendance}</span></td>
+      </tr>`;
+    });
+  }
+
+  function toggleAttendance(index) {
+    if (students[index].attendance === 'Present') students[index].attendance = 'Late';
+    else if (students[index].attendance === 'Late') students[index].attendance = 'Absent';
+    else students[index].attendance = 'Present';
+    renderAttendance();
+  }
+
+  function renderFees() {
+    const tbody = document.getElementById('feesTableBody');
+    tbody.innerHTML = '';
+    students.forEach((s, index) => {
+      const due = s.feesTotal - s.feesPaid;
+      tbody.innerHTML += `<tr>
+        <td>${s.name}</td>
+        <td>${s.class}</td>
+        <td>₦${s.feesTotal.toLocaleString()}</td>
+        <td>₦${s.feesPaid.toLocaleString()}</td>
+        <td>₦${due.toLocaleString()}</td>
+        <td><button onclick="payFee(${index})" class="btn-success" style="padding: 4px 8px; font-size: 11px;">Record Payment</button></td>
+      </tr>`;
+    });
+  }
+
+  function payFee(index) {
+    let amt = prompt("Enter payment amount (₦):");
+    if (amt && !isNaN(amt)) {
+      students[index].feesPaid += parseInt(amt);
+      refreshAllData();
+    }
+  }
+
+  function renderResults() {
+    const tbody = document.getElementById('resultsTableBody');
+    tbody.innerHTML = '';
+    const ranked = getRankings();
+    ranked.forEach(r => {
+      tbody.innerHTML += `<tr>
+        <td><strong>${r.position}</strong></td>
+        <td>${r.name}</td>
+        <td>${r.total} / 700</td>
+        <td>${r.avg}%</td>
+        <td><span class="badge bg-green">${r.grade}</span></td>
+      </tr>`;
+    });
+  }
+
+  function populateSelects() {
+    const mSelect = document.getElementById('marksStudentSelect');
+    const rSelect = document.getElementById('reportStudentSelect');
+    mSelect.innerHTML = '';
+    rSelect.innerHTML = '';
+
+    students.forEach((s, i) => {
+      mSelect.innerHTML += `<option value="${i}">${s.name} (${s.class})</option>`;
+      rSelect.innerHTML += `<option value="${i}">${s.name} (${s.class})</option>`;
+    });
+    loadStudentMarksIntoForm();
+    renderReportCard();
+  }
+
+  function loadStudentMarksIntoForm() {
+    const idx = document.getElementById('marksStudentSelect').value;
+    if (idx === "") return;
+    const m = students[idx].marks;
+    document.getElementById('m_eng').value = m.eng;
+    document.getElementById('m_math').value = m.math;
+    document.getElementById('m_sci').value = m.sci;
+    document.getElementById('m_soc').value = m.soc;
+    document.getElementById('m_rel').value = m.rel;
+    document.getElementById('m_hau').value = m.hau;
+    document.getElementById('m_comp').value = m.comp;
+  }
+
+  function saveStudentMarks() {
+    const idx = document.getElementById('marksStudentSelect').value;
+    students[idx].marks = {
+      eng: parseInt(document.getElementById('m_eng').value) || 0,
+      math: parseInt(document.getElementById('m_math').value) || 0,
+      sci: parseInt(document.getElementById('m_sci').value) || 0,
+      soc: parseInt(document.getElementById('m_soc').value) || 0,
+      rel: parseInt(document.getElementById('m_rel').value) || 0,
+      hau: parseInt(document.getElementById('m_hau').value) || 0,
+      comp: parseInt(document.getElementById('m_comp').value) || 0
+    };
+    alert("Marks updated and student positions recalculated!");
+    refreshAllData();
+  }
+
+  function renderReportCard() {
+    const idx = document.getElementById('reportStudentSelect').value;
+    if (idx === "") return;
+    const s = students[idx];
+    const ranked = getRankings().find(r => r.id === s.id);
+
+    let html = `
+      <p><strong>Student Name:</strong> ${s.name} | <strong>Admission No:</strong> ${s.id} | <strong>Class:</strong> ${s.class}</p>
+      <table>
+        <thead>
+          <tr><th>Subject</th><th>Score (100%)</th><th>Grade</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>English Language</td><td>${s.marks.eng}</td><td>${getSubjectGrade(s.marks.eng)}</td></tr>
+          <tr><td>Mathematics</td><td>${s.marks.math}</td><td>${getSubjectGrade(s.marks.math)}</td></tr>
+          <tr><td>Basic Science</td><td>${s.marks.sci}</td><td>${getSubjectGrade(s.marks.sci)}</td></tr>
+          <tr><td>Social Studies</td><td>${s.marks.soc}</td><td>${getSubjectGrade(s.marks.soc)}</td></tr>
+          <tr><td>IRS/CRS</td><td>${s.marks.rel}</td><td>${getSubjectGrade(s.marks.rel)}</td></tr>
+          <tr><td>Hausa Language</td><td>${s.marks.hau}</td><td>${getSubjectGrade(s.marks.hau)}</td></tr>
+          <tr><td>Computer Studies</td><td>${s.marks.comp}</td><td>${getSubjectGrade(s.marks.comp)}</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top: 15px; background: #f9fafb; padding: 10px; border-radius: 6px;">
+        <p style="margin: 3px 0;"><strong>Total Score:</strong> ${ranked.total} / 700</p>
+        <p style="margin: 3px 0;"><strong>Average:</strong> ${ranked.avg}%</p>
+        <p style="margin: 3px 0;"><strong>Overall Grade:</strong> ${ranked.grade}</p>
+        <p style="margin: 3px 0;"><strong>Position in Class:</strong> ${ranked.position}</p>
+      </div>
+    `;
+    document.getElementById('reportCardDetails').innerHTML = html;
+  }
+
+  function getSubjectGrade(score) {
+    if (score >= 70) return 'A';
+    if (score >= 60) return 'B';
+    if (score >= 50) return 'C';
+    if (score >= 40) return 'D';
+    if (score >= 30) return 'E';
+    return 'F';
+  }
+
+  function registerNewStudent() {
+    const name = document.getElementById('admName').value;
+    const id = document.getElementById('admId').value;
+    const cls = document.getElementById('admClass').value;
+
+    if (!name || !id) {
+      alert("Please fill in Student Name and Admission Number!");
+      return;
+    }
+
+    students.push({
+      id: id,
+      name: name,
+      class: cls,
+      feesPaid: 0,
+      feesTotal: 30000,
+      attendance: "Present",
+      marks: { eng: 0, math: 0, sci: 0, soc: 0, rel: 0, hau: 0, comp: 0 }
+    });
+
+    alert("Student " + name + " registered successfully!");
+    document.getElementById('admName').value = '';
+    document.getElementById('admId').value = '';
+    refreshAllData();
+  }
+
+  function publishNotice() {
+    const t = document.getElementById('noticeTitle').value;
+    const b = document.getElementById('noticeBody').value;
+    if (!t || !b) return;
+
+    notices.unshift({ title: t, body: b, date: new Date().toISOString().split('T')[0] });
+    document.getElementById('noticeTitle').value = '';
+    document.getElementById('noticeBody').value = '';
+    renderNotices();
+  }
+
+  function renderNotices() {
+    const container = document.getElementById('noticesContainer');
+    const dashContainer = document.getElementById('dashNoticeList');
+    container.innerHTML = '';
+    dashContainer.innerHTML = '';
+
+    notices.forEach(n => {
+      const card = `<div style="background:#f8fafc; padding:10px; margin-bottom:10px; border-left:3px solid var(--primary); border-radius:4px;">
+        <h4 style="margin:0;">${n.title} <small style="font-size:10px; color:#6b7280;">(${n.date})</small></h4>
+        <p style="margin:5px 0 0; font-size:13px;">${n.body}</p>
+      </div>`;
+      container.innerHTML += card;
+      dashContainer.innerHTML += card;
+    });
+  }
+</script>
+
+</body>
+</html>
