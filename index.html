@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ISMAIL AHMAD MEMORIAL ACADEMY JAHUN - Portal</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; margin: 0; padding: 0; }
+    .header { background: #1e3a8a; color: white; padding: 25px; text-align: center; }
+    .header img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; background: white; }
+    .header h1 { margin: 0; font-size: 22px; }
+    .header p { margin: 5px 0 0; font-size: 13px; opacity: 0.9; }
+    .card { background: white; max-width: 480px; margin: 30px auto; padding: 25px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    input, select, textarea, button { width: 100%; padding: 12px; margin-top: 10px; border-radius: 6px; border: 1px solid #d1d5db; box-sizing: border-box; font-family: inherit; }
+    button { background: #1e3a8a; color: white; font-weight: bold; border: none; cursor: pointer; transition: 0.3s; }
+    button:hover { background: #1d4ed8; }
+    .hidden { display: none; }
+    .dashboard { max-width: 850px; margin: 20px auto; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+    .badge { display: inline-block; padding: 5px 12px; background: #e0e7ff; color: #1e3a8a; border-radius: 15px; font-weight: bold; font-size: 14px; }
+    .info-section { background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #1e3a8a; }
+    .footer { text-align: center; margin-top: 25px; font-size: 12px; color: #6b7280; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <img id="schoolLogo" src="https://via.placeholder.com/80" alt="Logo">
+  <h1 id="displaySchoolName">ISMAIL AHMAD MEMORIAL ACADEMY JAHUN</h1>
+  <p>Agency for Mass Education Women Centre, Tsohon Layi, Jahun LGA, Jigawa State</p>
+  <p>Email: ismailahmadacademic@yahoo.com | Web: https://ismailahmadacademic.ng</p>
+</div>
+
+<!-- Public Info Box (Mission, Vision, About Us) -->
+<div style="max-width: 850px; margin: 20px auto; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <div class="info-section">
+    <h3 style="margin-top:0; color:#1e3a8a;">About Us</h3>
+    <p id="txtAbout">Loading school information...</p>
+  </div>
+  <div style="display: flex; gap: 15px;">
+    <div class="info-section" style="flex: 1;">
+      <h4 style="margin-top:0; color:#1e3a8a;">Mission</h4>
+      <p id="txtMission">Loading mission statement...</p>
+    </div>
+    <div class="info-section" style="flex: 1;">
+      <h4 style="margin-top:0; color:#1e3a8a;">Vision</h4>
+      <p id="txtVision">Loading vision statement...</p>
+    </div>
+  </div>
+</div>
+
+<!-- Login Section -->
+<div id="loginSection" class="card">
+  <h3 style="text-align: center; color: #1e3a8a; margin-top:0;">School Portal Login</h3>
+  <input type="email" id="loginEmail" placeholder="Enter Your Email">
+  <input type="password" id="loginPassword" placeholder="Enter Your Password">
+  <button onclick="handleLogin()" id="loginBtn">Login to Portal</button>
+  
+  <div class="footer">
+    <p>Powered by <strong>ALKALI ICT & NETWORK SOLUTION CENTER</strong></p>
+  </div>
+</div>
+
+<!-- Main Dashboard Section -->
+<div id="dashboardSection" class="dashboard hidden">
+  <h2 id="welcomeMsg" style="margin-bottom: 5px;">Welcome</h2>
+  <span id="roleBadge" class="badge"></span>
+  <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+
+  <!-- Super Admin / Proprietor Panel -->
+  <div id="adminPanel" class="hidden">
+    <h3>Proprietor / Admin Control Panel</h3>
+    <div style="background: #f1f5f9; padding: 20px; border-radius: 8px; margin-top: 15px;">
+      <h4>Manage School Information & Branding</h4>
+      <input type="text" id="inputLogoUrl" placeholder="Logo Link (Image URL)">
+      <textarea id="inputAbout" placeholder="Write 'About Us' details here..." rows="3"></textarea>
+      <textarea id="inputMission" placeholder="Write 'Mission Statement' here..." rows="2"></textarea>
+      <textarea id="inputVision" placeholder="Write 'Vision Statement' here..." rows="2"></textarea>
+      <button onclick="saveSchoolInfo()" style="background: #059669;">Save Information</button>
+    </div>
+  </div>
+
+  <!-- Class Master Panel -->
+  <div id="classMasterPanel" class="hidden">
+    <h3>Class Management: <span id="assignedClassName" style="color: #1e3a8a;"></span></h3>
+    <div style="background: #f9fafb; padding: 15px; border-radius: 8px; margin-top: 15px;">
+      <h4>Register New Student</h4>
+      <input type="text" id="studentName" placeholder="Full Name of Student">
+      <input type="text" id="admissionNo" placeholder="Admission Number (e.g., IAM/2026/001)">
+      
+      <label style="display:block; margin-top:10px; font-weight:bold; font-size:13px;">Select Class:</label>
+      <select id="studentClass">
+        <option value="PRI 1">PRI 1</option>
+        <option value="PRI 2">PRI 2</option>
+        <option value="PRI 3">PRI 3</option>
+        <option value="PRI 4">PRI 4</option>
+        <option value="PRI 5">PRI 5</option>
+        <option value="PRI 6">PRI 6</option>
+        <option value="Junior 1">Junior 1 (JSS 1)</option>
+        <option value="Junior 2">Junior 2 (JSS 2)</option>
+        <option value="Junior 3">Junior 3 (JSS 3)</option>
+      </select>
+
+      <button onclick="registerStudent()" id="regBtn">Register Student</button>
+    </div>
+  </div>
+
+  <!-- Accountant Panel -->
+  <div id="accountantPanel" class="hidden">
+    <h3>Finance & Payroll Panel</h3>
+    <p>Manage school fees, expenses, and staff salaries.</p>
+  </div>
+
+  <br><br>
+  <button onclick="handleLogout()" style="background: #dc2626;">Logout</button>
+  
+  <div class="footer">
+    <p>Powered by <strong>ALKALI ICT & NETWORK SOLUTION CENTER</strong></p>
+  </div>
+</div>
+
+<script>
+  // Insert your project credentials here
+  const SUPABASE_URL = "YOUR_SUPABASE_URL_HERE"; 
+  const SUPABASE_KEY = "YOUR_SUPABASE_ANON_KEY_HERE"; 
+  const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  // Load School Info on Startup
+  window.onload = async () => {
+    const { data } = await client.from('school_info').select('*').single();
+    if(data) {
+      document.getElementById('schoolLogo').src = data.logo_url || "https://via.placeholder.com/80";
+      document.getElementById('txtAbout').innerText = data.about_us || "No information updated yet.";
+      document.getElementById('txtMission').innerText = data.mission || "No information updated yet.";
+      document.getElementById('txtVision').innerText = data.vision || "No information updated yet.";
+    }
+  };
+
+  async function handleLogin() {
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    const btn = document.getElementById('loginBtn');
+
+    if(!email || !password) {
+      alert("Please enter both email and password!");
+      return;
+    }
+
+    btn.innerText = "Authenticating...";
+    btn.disabled = true;
+
+    const { data, error } = await client.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      alert("Login Error: " + error.message);
+      btn.innerText = "Login to Portal";
+      btn.disabled = false;
+    } else {
+      loadDashboard(data.user.id);
+    }
+  }
+
+  async function loadDashboard(userId) {
+    const { data: profile } = await client
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+
+    if (profile) {
+      document.getElementById('loginSection').classList.add('hidden');
+      document.getElementById('dashboardSection').classList.remove('hidden');
+      document.getElementById('welcomeMsg').innerText = "Welcome, " + profile.full_name;
+      document.getElementById('roleBadge').innerText = "ROLE: " + profile.role.toUpperCase();
+
+      if (profile.role === 'super_admin') {
+        document.getElementById('adminPanel').classList.remove('hidden');
+        const { data: info } = await client.from('school_info').select('*').single();
+        if(info) {
+          document.getElementById('inputLogoUrl').value = info.logo_url || '';
+          document.getElementById('inputAbout').value = info.about_us || '';
+          document.getElementById('inputMission').value = info.mission || '';
+          document.getElementById('inputVision').value = info.vision || '';
+        }
+      } else if (profile.role === 'class_master') {
+        document.getElementById('classMasterPanel').classList.remove('hidden');
+        document.getElementById('assignedClassName').innerText = profile.class_assigned;
+      } else if (profile.role === 'accountant') {
+        document.getElementById('accountantPanel').classList.remove('hidden');
+      }
+    }
+  }
+
+  async function saveSchoolInfo() {
+    const logo_url = document.getElementById('inputLogoUrl').value;
+    const about_us = document.getElementById('inputAbout').value;
+    const mission = document.getElementById('inputMission').value;
+    const vision = document.getElementById('inputVision').value;
+
+    const { error } = await client.from('school_info').upsert({
+      id: 1, logo_url, about_us, mission, vision
+    });
+
+    if(error) {
+      alert("Error saving data: " + error.message);
+    } else {
+      alert("School information updated successfully!");
+      location.reload();
+    }
+  }
+
+  async function registerStudent() {
+    const full_name = document.getElementById('studentName').value;
+    const admission_no = document.getElementById('admissionNo').value;
+    const class_name = document.getElementById('studentClass').value;
+    const btn = document.getElementById('regBtn');
+
+    if(!full_name || !admission_no) {
+      alert("Please fill in student's name and admission number!");
+      return;
+    }
+
+    btn.innerText = "Submitting...";
+    btn.disabled = true;
+
+    const user = (await client.auth.getUser()).data.user;
+
+    const { error } = await client.from('students').insert([
+      { full_name, admission_no, class_name, created_by: user.id }
+    ]);
+
+    if (error) {
+      alert("Error registering student: " + error.message);
+    } else {
+      alert("Successfully registered " + full_name + " under " + class_name + "!");
+      document.getElementById('studentName').value = '';
+      document.getElementById('admissionNo').value = '';
+    }
+    btn.innerText = "Register Student";
+    btn.disabled = false;
+  }
+
+  async function handleLogout() {
+    await client.auth.signOut();
+    location.reload();
+  }
+</script>
+
+</body>
+</html>
